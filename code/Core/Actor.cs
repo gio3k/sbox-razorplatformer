@@ -57,13 +57,8 @@ public partial class Actor : Panel
 
 		if ( !_initialized )
 		{
-			switch ( Box.Rect )
-			{
-				// freaky check for Panel readiness
-				case { Left: 0, Top: 0 }:
-				case { Width: 0, Height: 0 }:
-					return;
-			}
+			// freaky check for Panel readiness
+			if ( Box.Rect is { Width: 0, Height: 0 } ) return;
 
 			if ( Position == Vector2.Zero )
 				Position = Box.Rect.Position * ScaleFromScreen;
