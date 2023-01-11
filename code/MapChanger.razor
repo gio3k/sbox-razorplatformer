@@ -1,0 +1,36 @@
+﻿@using Platformer.Core
+@using Sandbox
+@inherits Actor
+
+@code {
+
+	private bool _completed;
+	private string _mapName;
+
+	private readonly TimeUntil _available = 1; // there's a bug where actors spawn at the top left initially
+	
+	public MapChanger() => Mass = 5;
+	
+	public override void SetProperty( string name, string value )
+	{
+		base.SetProperty( name, value );
+
+		if ( name == "map" ) _mapName = value;
+	}
+
+	protected override void ComputeCollision( Actor actor, Vector2 displacement )
+	{
+		base.ComputeCollision( actor, displacement );
+		
+		if ( _completed ) return;
+		
+		if ( actor is not Player ) return;
+
+		if ( !_available ) return;
+		
+		Static.SetMap( _mapName );
+
+		_completed = true;
+	}
+
+}

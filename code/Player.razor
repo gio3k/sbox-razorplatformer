@@ -1,0 +1,147 @@
+﻿@using Platformer.Core
+@using Sandbox.UI
+@using Sandbox
+@inherits Actor
+
+<style>
+	Player {
+		width: 45px; height: 45px;
+		
+		background-color: #2DC5DC;
+		
+		border-radius: 50%;
+		
+		border: 6px solid #00A5BC;
+		
+		pointer-events: all;
+		
+		transform-origin: 50% 50%;
+		
+		justify-content: center;
+		
+		.mark {	
+			width: 30%; height: 30%;
+		
+			background-color: white;
+			
+			border-radius: 50%;
+		}
+	}
+</style>
+
+<root>
+	<div class="mark" @ref=Mark></div>
+</root>
+
+@code {
+
+	private Panel Mark { get; set; }
+
+	private bool _enableExtraGroundFriction;
+
+	// the way these buttons are stored could be better
+	private bool _upHeld;
+	private bool _leftHeld;
+	private bool _rightHeld;
+	private bool _superHeld;
+	private float _angle;
+	private float _super = 0;
+
+	public Player()
+	{
+		AcceptsFocus = true;
+		InputFocus.Set( this );
+		Mass = 5;
+	}
+
+	protected override void CreateCollider() => UseCircleAsCollider( 9, 22.5f );
+
+	private void UpdateAngle()
+	{
+		var center = Box.Rect.Center;
+		_angle = float.Atan2(
+			Mouse.Position.y - center.y,
+			Mouse.Position.x - center.x
+			).RadianToDegree() + 90;
+	}
+
+	private void UpdateRotation()
+	{
+		var transform = new PanelTransform();
+		transform.AddRotation( 0, 0, _angle );
+		Style.Transform = transform;
+	}
+
+	private void UpdateMarkStyle() => Mark.Style.Height = _superHeld ? Length.Fraction( 0.3f + _super * 0.7f ) : Length.Percent( 30.0f );
+
+	protected override void Simulate()
+	{
+		// Jump check
+		if ( _upHeld && IsGrounded ) Velocity.y = -260;
+
+		// Left arrow check
+		if ( _leftHeld )
+		{
+			_enableExtraGroundFriction = true;
+			if ( Velocity.x > -200 ) Velocity.x -= 44.0f;
+		}
+
+		// Right arrow check
+		if ( _rightHeld )
+		{
+			_enableExtraGroundFriction = true;
+			if ( Velocity.x < 200 ) Velocity.x += 44.0f;
+		}
+
+		// Super check
+		if ( _superHeld && IsGrounded ) _super += 0.02f;
+		if ( _super > 0 && (_super >= 1 || !_superHeld) )
+		{
+			Velocity += Vector2.FromDegrees( _angle ) * (-1000 * _super);
+			_enableExtraGroundFriction = false;
+			_superHeld = false;
+		}
+		if ( !_superHeld ) _super = 0; // Reset to 0 if not held
+
+		// Update the angle
+		UpdateAngle();
+
+		// Update the angle mark on the player
+		UpdateMarkStyle();
+
+		// Update the player style rotation
+		UpdateRotation();
+
+		base.Simulate();
+
+		// We need a little extra friction when moving around
+		if ( _enableExtraGroundFriction && IsGrounded ) Velocity *= 0.97f;
+	}
+
+	public override void OnButtonEvent( ButtonEvent e )
+	{
+		base.OnButtonEvent( e );
+
+		// you could repeat this for the other buttons... but this is good for now
+		var reload = Input.GetButtonOrigin( InputButton.Reload ).ToLower();
+		var super = Input.GetButtonOrigin( InputButton.Jump ).ToLower();
+
+		switch ( e.Button )
+		{
+			case "w" or "up":
+				_upHeld = e.Pressed;
+				break;
+			case "a" or "left":
+				_leftHeld = e.Pressed;
+				break;
+			case "d" or "right":
+				_rightHeld = e.Pressed;
+				break;
+		}
+
+		if ( e.Button == super ) _superHeld = e.Pressed;
+
+		if ( e.Button == reload && e.Pressed ) Static.ResetMap();
+	}
+
+}

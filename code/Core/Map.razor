@@ -1,0 +1,42 @@
+﻿@namespace Platformer.Core
+@using System.Collections.Generic
+@using System.Linq
+@using Sandbox.UI
+@inherits Sandbox.UI.RootPanel
+
+<style>
+	Map {
+		width: 100%; height: 100%;
+	}
+</style>
+
+@code {
+
+	public readonly List<Actor> Actors = new();
+
+	public void Simulate()
+	{
+		foreach ( var actor in Actors.ToList() ) actor.ProcessSimulate();
+	}
+
+	protected override void OnChildAdded( Panel child )
+	{
+		base.OnChildAdded( child );
+
+		if ( child is not Actor actor ) return;
+
+		if ( Actors.Contains( actor ) ) return;
+
+		Actors.Add( actor );
+	}
+
+	protected override void OnChildRemoved( Panel child )
+	{
+		base.OnChildRemoved( child );
+
+		if ( child is not Actor actor ) return;
+
+		Actors.Remove( actor );
+	}
+
+}

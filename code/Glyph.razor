@@ -1,0 +1,136 @@
+﻿@using System
+@using Sandbox
+@using Sandbox.UI
+@namespace Platformer
+@inherits Sandbox.UI.Panel;
+
+<root>
+	<!-- this code is from ProjectBullet (https://github.com/lotuspar/projectbullet), style might be different -->
+	<image style="align-items: center; justify-content: center" @ref="Image"/>
+</root>
+
+@code {
+	private Image Image { get; set; }
+
+	private InputGlyphSize _buttonSize = InputGlyphSize.Medium;
+	private InputButton _button = 0;
+
+	private bool HasButton => _button != 0;
+
+	public override void SetProperty( string name, string value )
+	{
+		base.SetProperty( name, value );
+
+		switch ( name )
+		{
+			case "input":
+				try
+				{
+					_button = Enum.Parse<InputButton>( value, true );
+				}
+				catch ( ArgumentException )
+				{
+					if ( !ulong.TryParse( value, out var number ) )
+					{
+						throw new ArgumentException( $"Couldn't find input glyph for {value}" );
+					}
+
+					_button = (InputButton)number;
+				}
+				break;
+			case "size":
+				_buttonSize = Enum.Parse<InputGlyphSize>( value, true );
+				break;
+		}
+	}
+
+	private float? GetComputedStyleHeight()
+	{
+		if ( Image.ComputedStyle == null )
+		{
+			return null;
+		}
+
+		if ( Image.ComputedStyle.Height == null )
+		{
+			return null;
+		}
+
+		if ( !Image.ComputedStyle.Height.HasValue )
+		{
+			return null;
+		}
+
+		if ( Image.ComputedStyle.Height.Value.Unit != LengthUnit.Pixels )
+		{
+			return null;
+		}
+
+		return Image.ComputedStyle.Height.Value.Value;
+	}
+
+	private float? GetComputedFontSize()
+	{
+		if ( Image.ComputedStyle == null )
+		{
+			return null;
+		}
+
+		if ( Image.ComputedStyle.FontSize == null )
+		{
+			return null;
+		}
+
+		if ( !Image.ComputedStyle.FontSize.HasValue )
+		{
+			return null;
+		}
+
+		if ( Image.ComputedStyle.FontSize.Value.Unit != LengthUnit.Pixels )
+		{
+			return null;
+		}
+
+		return Image.ComputedStyle.FontSize.Value.Value;
+	}
+
+	public override void Tick()
+	{
+		base.Tick();
+
+		if ( !HasButton )
+		{
+			return;
+		}
+
+		Image.Texture = Input.GetGlyph( _button, _buttonSize, GlyphStyle.Dark.WithSolidABXY() );
+
+		if ( Image.Texture == null )
+		{
+			return;
+		}
+
+		// change: for this demo if we can't find a height just == 0 
+		var height = 0.0f;
+		var computedFontSize = GetComputedFontSize();
+		if ( computedFontSize != null )
+		{
+			// Use the font size as the height
+			height = computedFontSize.Value;
+		}
+		else
+		{
+			var computedHeight = GetComputedStyleHeight();
+			if ( computedHeight != null )
+			{
+				// Use the computed height as the height
+				height = computedHeight.Value;
+			}
+		}
+
+		var multiplier = height / Image.Texture.Height;
+		Image.Style.Width = Length.Pixels( Image.Texture.Width * multiplier );
+		Image.Style.Height = Length.Pixels( height );
+	}
+
+}
