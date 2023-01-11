@@ -1,0 +1,77 @@
+﻿@namespace Platformer.Maps
+@using Platformer.Core
+@using Sandbox.UI
+@inherits Map
+@attribute [StyleSheet( "/Maps/Stage01.scss" )]
+
+<root>
+	<MapChanger style="top: 656px; left: 70%; position: absolute" map="Stage02" static></MapChanger>
+	
+	<Player style="left: 450px; top: 450px"></Player>
+	
+	<!-- Bottom wall -->
+	<Actor class="wall" style="
+    	top: 70%;
+    	width: 100%; height: 50%;
+    	transform: rotateZ(0deg);
+    " static></Actor>
+	<!-- Top wall -->
+	<Actor class="wall" style="
+    	top: -50px; left: -20px; 
+    	width: 100%; height: 40%;
+    	transform: rotateZ(0deg);
+    " static></Actor>
+	<!-- Left wall -->
+	<Actor class="wall" style="
+    	top: 0; left: -20px;
+    	width: 190px; height: 100%; 
+    	transform: rotateZ(3deg);
+    " static></Actor>
+	<!-- Right wall -->
+	<Actor class="wall" style="
+    	top: -30px; right: -150px; 
+    	width: 300px; height: 100%;
+    	transform: rotateZ(9deg);
+    " static></Actor>
+	
+	<!-- Obstacle -->
+	<Actor class="wall" style="
+        top: 40%; left: 40%; 
+        width: 30px; height: 100%;
+        transform: rotateZ(9deg);
+    " static></Actor>
+	
+	<!-- Super jump text -->
+    <div style="
+    	flex-direction: column; 
+    	
+    	position: absolute; 
+    	
+    	top: 45%; left: -24%; 
+    	
+    	width: 100%; height: 80%;
+    ">
+        <div class="text" style="font-size: 25px">
+        	There's something in the way - but that's ok!
+        </div>
+    </div>
+	
+	<!-- Super jump text -->
+	<div style="
+		flex-direction: column; 
+		
+		position: absolute; 
+		
+		top: 11%; left: -490px; 
+		
+		width: 100%; height: 80%;
+		
+		transform: rotateZ(99deg);
+	">
+	    <div class="text" style="font-size: 20px">
+    		Hold
+    		<Glyph input="jump" style="font-size: 29px; padding: 7px"></Glyph>
+    		to super jump!
+    	</div>
+	</div>
+</root>

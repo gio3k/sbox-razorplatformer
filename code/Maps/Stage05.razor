@@ -1,0 +1,69 @@
+﻿@namespace Platformer.Maps
+@using Platformer.Core
+@using Sandbox.UI
+@inherits Map
+@attribute [StyleSheet( "/Maps/Stage05.scss" )]
+
+<root>
+	<MapChanger style="top: 376px; left: 82%; transform: rotateZ(30deg); position: absolute" map="DemoComplete" static></MapChanger>
+	
+	<Player style="left: 250px; top: 200px"></Player>
+	
+	<!-- Danger -->
+	<MapChanger class="danger" style="
+		top: 0; left: 84%;
+		width: 500px; height: 1200px;
+		position: absolute;
+		transform: rotateZ(30deg);
+	" map="Stage05" static></MapChanger>
+	
+	<MapChanger class="danger" style="
+		top: 600px; left: 24%;
+		width: 200px; height: 100px;
+		position: absolute;
+		transform: rotateZ(12deg);
+	" map="Stage05" static></MapChanger>
+	
+	<MapChanger class="danger" style="
+		top: 600px; left: 44%;
+		width: 150px; height: 200px;
+		position: absolute;
+		transform: rotateZ(12deg);
+	" map="Stage05" static></MapChanger>
+	
+	<MapChanger class="danger" style="
+		top: 760px; left: 64%;
+		width: 250px; height: 150px;
+		position: absolute;
+		transform: rotateZ(12deg);
+	" map="Stage05" static></MapChanger>
+	
+	<!-- Bottom wall -->
+	<Actor class="wall" style="
+    	top: 70%;
+    	width: 100%; height: 50%;
+    	transform: rotateZ(12deg);
+    " static></Actor>
+
+	<!-- Left wall -->
+	<Actor class="wall" style="
+    	top: -30px; left: -60px;
+    	width: 250px; height: 100%; 
+    	transform: rotateZ(6deg);
+    " static></Actor>
+
+	<!-- Danger text -->
+    <div style="
+        flex-direction: column; 
+        
+        position: absolute; 
+        
+        top: 21%; left: -270px; 
+        
+        width: 100%; height: 80%;
+    ">
+        <div class="text" style="transform: rotateZ(12deg); font-size: 25px">
+            This is the last one for now - hope you enjoyed!
+        </div>
+    </div>
+</root>

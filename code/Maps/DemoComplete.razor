@@ -1,0 +1,46 @@
+﻿@namespace Platformer.Maps
+@using Platformer.Core
+@using Sandbox.UI
+@inherits Map
+@attribute [StyleSheet( "/Maps/DemoComplete.scss" )]
+
+<root>
+	<MapChanger style="top: 700px; left: 82%; position: absolute" map="Stage00" static></MapChanger>
+	
+	<Player style="left: 250px; top: 200px"></Player>
+	
+	<!-- Left wall -->
+	<Actor class="wall" style="
+		top: -10px; left: -30px;
+		width: 190px; height: 100%; 
+		transform: rotateZ(-3deg);
+	" static></Actor>
+	<!-- Right wall -->
+	<Actor class="wall" style="
+		top: -30px; right: -150px; 
+		width: 300px; height: 100%;
+		transform: rotateZ(3deg);
+	" static></Actor>
+	<!-- Bottom wall -->
+	<Actor class="wall" style="
+    	top: 70%;
+    	width: 100%; height: 50%;
+    " static></Actor>
+	
+	<!-- Outro text -->
+	<div style="flex-direction: column; position: absolute; top: 35%; left: -20%; width: 100%; height: 80%">
+		<div class="text heading">Thanks for trying my demo ❤</div>
+		<div class="text">
+			If you found a bug, please let me know
+		</div>
+		<div class="text" style="font-size: 15px"> Check out the code on GitHub </div>
+		<div class="text" style="font-size: 15px"> https://github.com/lotuspar/sbox-razorplatformer </div>
+	</div>
+	
+	<!-- MapChanger text -->
+    <div style="flex-direction: column; position: absolute; top: 710px; left: 430px; width: 100%; height: 80%">
+    	<div class="text" style="font-size: 20px">
+    		You can go back to the start here
+    	</div>
+    </div>
+</root>

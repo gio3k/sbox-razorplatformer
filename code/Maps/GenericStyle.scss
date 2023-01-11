@@ -1,0 +1,42 @@
+﻿/* Colors */
+$generic-wall-color: #262622;
+$map-changer-color: #FF822D;
+$danger-color: #E7405A;
+
+/* Actor styling */
+Actor {
+	position: absolute;
+}
+
+MapChanger {
+	background-color: $map-changer-color;
+
+	width: 100px;
+	height: 100px;
+
+	border-radius: 5px;
+
+	&.danger {
+		background-color: $danger-color;
+	}
+}
+
+/* Text styling */
+.text {
+	font-family: Inter;
+	font-weight: bold;
+	font-size: 30px;
+
+	color: #262622;
+
+	justify-content: center;
+	align-items: center;
+
+	&.heading {
+		font-size: 40px;
+	}
+}
+
+.wall {
+	background-color: $generic-wall-color;
+}

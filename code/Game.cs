@@ -9,7 +9,7 @@ public class PlatformerGame : GameManager
 	{
 		if ( Game.IsServer ) return;
 
-		Static.SetMap<TestStage>();
+		Static.SetMap<Stage00>();
 	}
 
 	public override void Simulate( IClient cl )
