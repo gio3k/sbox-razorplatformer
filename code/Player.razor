@@ -76,6 +76,11 @@
 
 	protected override void Simulate()
 	{
+		if ( Input.Pressed( InputButton.Chat ) && InputFocus.Current != this )
+		{
+			InputFocus.Set( this );
+		}
+
 		// Jump check
 		if ( _upHeld && IsGrounded ) Velocity.y = -260;
 
@@ -118,6 +123,21 @@
 		if ( _enableExtraGroundFriction && IsGrounded ) Velocity *= 0.97f;
 	}
 
+	protected override void FrameSimulate()
+	{
+		base.FrameSimulate();
+
+		if ( InputFocus.Current != this )
+		{
+			var pos = Vector2.One * 100;
+			DebugOverlay.ScreenText( "!!!", pos, 0, Color.Yellow );
+			DebugOverlay.ScreenText( "You can now use the Pause Menu as normal.", pos, 1, Color.Yellow );
+			DebugOverlay.ScreenText( $"To keep playing please press {Input.GetButtonOrigin( InputButton.Chat )}", pos, 2, Color.Yellow );
+			DebugOverlay.ScreenText( "If you're leaving hope you had fun!", pos, 3, Color.Yellow );
+			DebugOverlay.ScreenText( "!!!", pos, 4, Color.Yellow );
+		}
+	}
+
 	public override void OnButtonEvent( ButtonEvent e )
 	{
 		base.OnButtonEvent( e );
@@ -137,6 +157,11 @@
 			case "d" or "right":
 				_rightHeld = e.Pressed;
 				break;
+		}
+
+		if ( e.Button == "escape" )
+		{
+			InputFocus.Clear( this );
 		}
 
 		if ( e.Button == super ) _superHeld = e.Pressed;
